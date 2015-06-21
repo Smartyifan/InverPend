@@ -1,0 +1,16 @@
+Robomodule 
+  USART2
+	PA.2
+	PA.3
+
+Pending Encode
+  TIM3
+	A	PA.6
+	B	PA.7
+
+EXTI KEY
+	KEY0 PA.0
+
+LED 
+	RLED	PB.0
+	GLED	PC.0
