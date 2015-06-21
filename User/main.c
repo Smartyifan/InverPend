@@ -84,7 +84,7 @@ int main(void)
 		printf("PendBar is in %d\n",TIM_GetCounter(TIM3));
 		
 // 		RLED= 0;
-		delay_ms(1000);
+// 		delay_ms(1000);
 // 		RLED = 1;
 // 		delay_ms(1000);
     }
