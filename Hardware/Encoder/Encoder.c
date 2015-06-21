@@ -79,10 +79,10 @@ void EncoderGPIOInit(EncoderStruct * Encoder){
         Encoder->TI2 = GPIO_Pin_7;
     }
     
-    //设置为浮空输入模式
+    //设置为上拉输入模式
     GPIO_StructInit(&GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Pin = Encoder->TI1 | Encoder->TI2;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;		
     GPIO_Init(Encoder->GPIOBase, &GPIO_InitStructure);
 }
 
@@ -153,22 +153,5 @@ void EncoderTIMInit(EncoderStruct * Encoder){
 void EncoderUpdata(EncoderStruct * Encoder){
     Encoder->Dir = 0x0010 & Encoder->Timer->CR1;            //读方向
     Encoder->Position = TIM_GetCounter(Encoder->Timer);    //读角度 0~1600
-//     Encoder->Palstance = Encoder->Position - Encoder->Line/2;    //计算角速度
-    
-//     if(Encoder->Dir == ENC_AntiCW && Encoder->Palstance < 0) 
-//         Encoder->Palstance += 4000;    //计算角速度    (°/1ms)
-//     else if(Encoder->Dir == ENC_CW && Encoder->Palstance < 0)
-//         Encoder->Palstance -= 4000;    //计算角速度    (°/1ms)
-
-//     Encoder->Palstance = (Encoder->Position - Encoder->LastPosition)/Encoder->sample_ms;    //计算角速度 
-//     //滤波
-//     if((Encoder->Palstance - Encoder->LastPalstance)>20 || (Encoder->Palstance - Encoder->LastPalstance)<-20 ){
-//         Encoder->Palstance = Encoder->LastPalstance;
-//     }
-//     Encoder->LastPosition = Encoder->Position;
-//     Encoder->LastPalstance = Encoder->Palstance;
-
-        
-//     Encoder->AngAcce = Encoder->Palstance - Encoder->LastPalstance;    //计算角加速度
 }
 /******************* (C) COPYRIGHT 2014 STMicroelectronics *****END OF FILE****/

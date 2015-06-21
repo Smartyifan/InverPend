@@ -61,13 +61,8 @@ void Initial()
 
     delay_init();				//延时初始化
     uart_init(115200);			//串口初始化
-// 	LEDInit();					//LED初始化
 	
 	EncoderInit(&PendBarEncoder);	//编码器初始化
-// 	RoboInit();						//电机驱动初始化
-// 	EXTIInit();						//按键中断
-	
-// 	Timer1Init(5000,3600);		//定时器中断初始化 f= 72000000/(500*720) = 2 Hz
 }
 
 /**
@@ -80,9 +75,14 @@ int main(void)
     Initial();
     while(1)
     {
-		EncoderUpdata(&PendBarEncoder);
-		printf("PendBar is in %d\n",TIM_GetCounter(TIM3));
-		
+		/*print position of PendBar --------------------------*/
+// 		EncoderUpdata(&PendBarEncoder);
+		PendBarEncoder.Position = TIM_GetCounter(TIM3);    //读角度 0~4000
+
+		printf("%d\n",PendBarEncoder.Position);
+		delay_ms(1000);
+
+		/*flash LED -----------------------------------------*/
 // 		RLED= 0;
 // 		delay_ms(1000);
 // 		RLED = 1;
