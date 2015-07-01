@@ -1,7 +1,7 @@
 Robomodule 
   USART2
-	PA.2
-	PA.3
+	TxD	PA.2
+	RxD	PA.3
 
 Pending Encode
   TIM3

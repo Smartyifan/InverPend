@@ -65,9 +65,11 @@ void EXTIInit(void)
   */
 void EXTI0_IRQHandler(void)
 {
-    delay_ms(100);
+    delay_ms(200);
     if(KEY0 == 0){
 		GLED = !GLED;
+	    RoboModule_Driver_Location_Mode_Set(2500,1000,500);		//电机到500线位置
+		
 		/* 复位 -----------------------------------------------------*/
 // 		RoboModule_Driver_Reset();
 // 		delay_ms(1500);					//等待1.5s钟
