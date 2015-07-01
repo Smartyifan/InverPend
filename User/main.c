@@ -36,17 +36,9 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+
 void SetParam(void){
-    /*PendBarEncoder---------*/
-    PendBarEncoder.Timer = TIM3;    //TIM3  PA.6    PA.7
-    PendBarEncoder.Line = 400;
-    PendBarEncoder.sample_ms = 10;
-
-	/*Pending PID*/
-    PIDParamInit(&PendPID);
-	PendPID.Kp = 0.03;
-    PendPID.Kd = 0;
-
+	
 }
 
 /**
@@ -57,12 +49,13 @@ void SetParam(void){
 void Initial()
 {
 	SetParam();
-	NVIC_Configuration();		//中断初始化
 
     delay_init();				//延时初始化
     uart_init(115200);			//串口初始化
 	
-	EncoderInit(&PendBarEncoder);	//编码器初始化
+	LEDInit();					//最小系统板上的LED初始化
+	EXTIInit();					//最小系统板按键中断的初始化
+	RoboInit(ENTER_LOCATION_MODE);	//初始化RoboModule并进入位置模式
 }
 
 /**
@@ -75,18 +68,12 @@ int main(void)
     Initial();
     while(1)
     {
-		/*print position of PendBar --------------------------*/
-// 		EncoderUpdata(&PendBarEncoder);
-		PendBarEncoder.Position = TIM_GetCounter(TIM3);    //读角度 0~4000
-
-		printf("%d\n",PendBarEncoder.Position);
-		delay_ms(1000);
-
 		/*flash LED -----------------------------------------*/
-// 		RLED= 0;
-// 		delay_ms(1000);
-// 		RLED = 1;
-// 		delay_ms(1000);
+		RLED= 0;			//RLED 灭
+		delay_ms(1000);		//延时1s																	
+		
+		RLED = 1;			//RLED亮
+		delay_ms(1000);		//延时1s
     }
 }
 

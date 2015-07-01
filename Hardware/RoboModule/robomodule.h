@@ -3,7 +3,7 @@
   * @file    
   * @author  ¼ÖÒ»·«
   * @version V3.5.0
-  * @date    2014-10-4
+  * @date    2015-6-30
   * @brief   
   ******************************************************************************
   * @attention
@@ -124,7 +124,7 @@
 #define ENTER_SPEED_MODE             0x58
 #define ENTER_LOCATION_MODE          0x59
 /*extern function-------------------------------------------------------------*/
-extern void RoboInit(void);
+extern void RoboInit(u8 RoboMode);
 extern void RoboModule_Driver_Reset(void);
 extern void RoboModule_Driver_Mode_Chioce(unsigned char ENTER_X_MODE);
 extern void RoboModule_Driver_PWM_Mode_Set(short PWM_Value);

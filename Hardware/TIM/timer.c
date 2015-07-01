@@ -68,21 +68,8 @@ void Timer1Init(u16 arr,u16 psc)
     */
 void TIM1_UP_IRQHandler(void)
 {
-	float error;
     if ( TIM_GetITStatus(TIM1 , TIM_IT_Update) != RESET ) 
-    { 
-// 		/* 读取数据	---------------------------------------------------------------*/
-// 		PendBarEncoder.Dir = 0x0010 & PendBarEncoder.Timer->CR1;            //读方向
-// 		PendBarEncoder.Position = TIM_GetCounter(PendBarEncoder.Timer);    //读角度 0~1600
-// 		
-// 		/* 计算PID ----------------------------------------------------------------*/
-// 		error = PendBarEncoder.Position-(PendBarEncoder.Line)/2;	//计算error
-// 		PIDGetError(&PendPID,error);								//存入误差
-// 		PIDCalculatre(&PendPID);									//计算PIDout	
-// 		
-// 		/* 给电机驱动发送数据 -----------------------------------------------------*/
-// 		RoboModule_Driver_Speed_Mode_Set(4000,PendPID.PIDout);
-		
+    { 		
         TIM_ClearITPendingBit(TIM1, TIM_FLAG_Update);    
     }    
 }
