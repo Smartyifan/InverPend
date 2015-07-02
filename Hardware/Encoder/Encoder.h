@@ -22,10 +22,7 @@
 
 typedef struct EncoderStruct{
     TIM_TypeDef * Timer;
-    u8 TIMx_PRE_EMPTION_PRIORITY;   //中断优先级
-    u8 TIMx_SUB_PRIORITY;           //子优先级
     u16 Line;           //线数
-    u16 sample_ms;      //采样间隔  (ms)
 
     GPIO_TypeDef * GPIOBase;
     u16 TI1;

@@ -14,11 +14,11 @@
 #ifndef _TIMER_H
 #define _TIMER_H
 /* Includes ------------------------------------------------------------------*/
-
+#include "sys/sys.h"
 /* Define --------------------------------------------------------------------*/
 
 /*extern function-------------------------------------------------------------*/
-extern void Timer1Init(u16 arr,u16 psc);
+extern void Timer2Init(u16 arr,u16 psc);
 		 				    
 #endif
 /******************* (C) COPYRIGHT 2014 STMicroelectronics *****END OF FILE****/

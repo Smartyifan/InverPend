@@ -12,6 +12,8 @@
   *		APB2的时钟函数使能UART2，所以UART2的时钟一直没有配置好
   *	3.使用USART_SendData函数，一定要先检查(USART2->SR&0X40)是否不为0，等发送结束
   *		后才能继续发送下一个数
+  *	2015-07-02 21:49:14
+  *	将发送数据的函数由死循环等待结束改成超时强制结束
   ******************************************************************************
   */  
   
@@ -84,6 +86,7 @@ void UART2Init(void){
   */
 void RoboInit(u8 RoboMode){
 	UART2Init();			//初始化串口2	波特率115200
+	
 	/* 复位 -----------------------------------------------------*/
 	RoboModule_Driver_Reset();		//RoboModule复位
 	delay_ms(1500);					//等待1.5s钟
@@ -99,10 +102,14 @@ void RoboInit(u8 RoboMode){
   *@retval  None
   */
 void RoboSendData(u8 *Data){
+	u16 timeout=0;
 	u8 i;
 	//发送通信数组
 	for(i=0;i<10;i++){
-		while((USART2->SR&0X40)==0);	//等待发送结束
+		while((USART2->SR&0X40)==0){
+			timeout++;
+			if(timeout >= 0xFFFF){timeout = 0;break;}
+		};	//等待发送结束,当超时时退出
 		USART_SendData(USART2,Data[i]);
 	}
 }
@@ -186,12 +193,12 @@ void RoboModule_Driver_PWM_Mode_Set(short PWM_Value)
     Data[1] = 0x56;
     Data[2] = (unsigned char)((PWM_Value>>8)&0xff);;
     Data[3] = (unsigned char)(PWM_Value&0xff);
-    Data[4] = 0xFF;
-    Data[5] = 0xFF;
-    Data[6] = 0xFF;
-    Data[7] = 0xFF;
-    Data[8] = 0xFF;
-    Data[9] = 0xFF;
+    Data[4] = 0x00;
+    Data[5] = 0x00;
+    Data[6] = 0x00;
+    Data[7] = 0x00;
+    Data[8] = 0x00;
+    Data[9] = 0x00;
 
 	RoboSendData(Data);
 }
@@ -219,12 +226,12 @@ void RoboModule_Driver_Current_Mode_Set(short Current_Value)
     Data[1] = 0x57;
     Data[2] = (unsigned char)((Current_Value>>8)&0xff);
     Data[3] = (unsigned char)(Current_Value&0xff);
-    Data[4] = 0xFF;
-    Data[5] = 0xFF;
-    Data[6] = 0xFF;
-    Data[7] = 0xFF;
-    Data[8] = 0xFF;
-    Data[9] = 0xFF;
+    Data[4] = 0x00;
+    Data[5] = 0x00;
+    Data[6] = 0x00;
+    Data[7] = 0x00;
+    Data[8] = 0x00;
+    Data[9] = 0x00;
     
 	RoboSendData(Data);
 }
@@ -264,10 +271,10 @@ void RoboModule_Driver_Speed_Mode_Set(short PWM_Value,short Speed_Value)
     Data[3] = (unsigned char)(PWM_Value&0xff);
     Data[4] = (unsigned char)((Speed_Value>>8)&0xff);
     Data[5] = (unsigned char)(Speed_Value&0xff);
-    Data[6] = 0xFF;
-    Data[7] = 0xFF;
-    Data[8] = 0xFF;
-    Data[9] = 0xFF;
+    Data[6] = 0x00;
+    Data[7] = 0x00;
+    Data[8] = 0x00;
+    Data[9] = 0x00;
     
 	RoboSendData(Data);
 }

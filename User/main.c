@@ -35,10 +35,17 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-
 void SetParam(void){
+	/* 摆杆PID结构体参数初始化 ----------*/
+	PIDParamInit(&PendPID);	//数据初始化
+	PendPID.Kp = 0.01;			//给参数赋值
+	PendPID.Ki = 0;
+	PendPID.Kd = 0;
+	PendPID.PIDout_H = 30;		//PIDout高阈值设置
 	
+	/* 摆杆编码器参数初始化 ------------*/
+	PendBarEncoder.Timer = TIM3;
+	PendBarEncoder.Line = 400;
 }
 
 /**
@@ -46,16 +53,18 @@ void SetParam(void){
   *@param   None;
   *@retval  None
   */
-void Initial()
+void Initial(void)
 {
 	SetParam();
 
     delay_init();				//延时初始化
     uart_init(115200);			//串口初始化
-	
 	LEDInit();					//最小系统板上的LED初始化
-	EXTIInit();					//最小系统板按键中断的初始化
-	RoboInit(ENTER_LOCATION_MODE);	//初始化RoboModule并进入位置模式
+
+	Timer2Init(2000,720);			//72 000 000/(2 000*720) = 50 Hz
+	
+	EXTIInit();						//按键中断初始化
+	EncoderInit(&PendBarEncoder);	//摆杆编码器初始化
 }
 
 /**
@@ -68,12 +77,12 @@ int main(void)
     Initial();
     while(1)
     {
-		/*flash LED -----------------------------------------*/
+		/*flash LED 指示程序运行---------------------------------*/
 		RLED= 0;			//RLED 灭
-		delay_ms(1000);		//延时1s																	
+		delay_ms(500);		//延时1s	
 		
 		RLED = 1;			//RLED亮
-		delay_ms(1000);		//延时1s
+		delay_ms(500);		//延时1s
     }
 }
 

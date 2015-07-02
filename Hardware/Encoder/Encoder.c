@@ -7,7 +7,8 @@
   * @brief   Blank
   ******************************************************************************
   * @attention
-  * 使用TIM3中断
+  * 1.使用TIM3中断
+  * 2.编码器Vcc应接3.3V
   ******************************************************************************
   */  
   
@@ -39,8 +40,6 @@ void EncoderTIMInit(EncoderStruct * Encoder);
 void EncoderInit(EncoderStruct * Encoder){
     EncoderGPIOInit(Encoder);
     EncoderTIMInit(Encoder);
-    
-//     EncoderNVICInit(Encoder);
     
     Encoder->Dir = ENC_CW;
     Encoder->Palstance = 0;
@@ -86,30 +85,31 @@ void EncoderGPIOInit(EncoderStruct * Encoder){
     GPIO_Init(Encoder->GPIOBase, &GPIO_InitStructure);
 }
 
-/**
-  *@brief   EncoderNVICInit
-  *@param   None;
-  *@retval  None
-  */
-void EncoderNVICInit(EncoderStruct * Encoder){
-    NVIC_InitTypeDef NVIC_InitStructure;
-    
-    if(Encoder->Timer == TIM2){
-        NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-    }else if(Encoder->Timer == TIM3){
-        NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-    }else if(Encoder->Timer == TIM4){
-        NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
-    }
-    
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = Encoder->TIMx_PRE_EMPTION_PRIORITY;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = Encoder->TIMx_SUB_PRIORITY;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-    
-    TIM_ClearFlag(Encoder->Timer, TIM_FLAG_Update);
-    TIM_ITConfig(Encoder->Timer, TIM_IT_Update, ENABLE);
-}
+//不用中断
+// /**
+//   *@brief   EncoderNVICInit
+//   *@param   None;
+//   *@retval  None
+//   */
+// void EncoderNVICInit(EncoderStruct * Encoder){
+//     NVIC_InitTypeDef NVIC_InitStructure;
+//     
+//     if(Encoder->Timer == TIM2){
+//         NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+//     }else if(Encoder->Timer == TIM3){
+//         NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+//     }else if(Encoder->Timer == TIM4){
+//         NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
+//     }
+//     
+//     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = Encoder->TIMx_PRE_EMPTION_PRIORITY;
+//     NVIC_InitStructure.NVIC_IRQChannelSubPriority = Encoder->TIMx_SUB_PRIORITY;
+//     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+//     NVIC_Init(&NVIC_InitStructure);
+//     
+//     TIM_ClearFlag(Encoder->Timer, TIM_FLAG_Update);
+//     TIM_ITConfig(Encoder->Timer, TIM_IT_Update, ENABLE);
+// }
 
 /**
   *@brief   EncoderTIMInit

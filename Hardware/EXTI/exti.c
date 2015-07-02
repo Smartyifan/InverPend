@@ -1,13 +1,13 @@
 /**
   ******************************************************************************
-  * @file    EXTI/exti
+  * @file    E:\GitRepo\InverPend\Hardware\EXTI\exti.c
   * @author  贾一帆
   * @version V3.5.0
-  * @date    Date
-  * @brief   Blank
+  * @date    2015-07-02 19:42:16
+  * @brief   按键中断程序
   ******************************************************************************
   * @attention
-  * 
+  * PA.0 下降沿中断
   ******************************************************************************
   */  
   
@@ -52,8 +52,8 @@ void EXTIInit(void)
     EXTI_Init(&EXTI_InitStructure);                                 //初始化中断
     
     NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;            	//0线中断
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;       //抢占优先级
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 2;       //子优先级
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;       //抢占优先级
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 0;       //子优先级
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);                                 //优先级初始化
 }
@@ -65,23 +65,18 @@ void EXTIInit(void)
   */
 void EXTI0_IRQHandler(void)
 {
-    delay_ms(200);
+    delay_ms(100);
     if(KEY0 == 0){
-		GLED = !GLED;
-	    RoboModule_Driver_Location_Mode_Set(2500,1000,500);		//电机到500线位置
-		
-		/* 复位 -----------------------------------------------------*/
-// 		RoboModule_Driver_Reset();
-// 		delay_ms(1500);					//等待1.5s钟
-// 		
-// 		/* 模式选择 -------------------------------------------------*/
-// 		RoboModule_Driver_Mode_Chioce(ENTER_SPEED_MODE);
-// 		delay_ms(600);					//等待600ms
-// 		
-// 		/* Speed = 0 ------------------------------------------------*/
-// 		RoboModule_Driver_Speed_Mode_Set(4000,0);
+		/* 中断处理部分 ----------------------------------------------------------------------------*/
+		GLED = 0;							//GLED 点亮 
+		RoboInit(ENTER_SPEED_MODE);			//进入速度环控制模式 		
+		TIM_Cmd(TIM2, ENABLE);  						//使能TIM2					 
+		TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE ); 		//使能指定的TIM2中断,允许更新中断
+		while(KEY0 == 0);					//等待KEY0松开
+		GLED = 1;							//GLED 熄灭
+		/* END -------------------------------------------------------------------------------------*/
 	}
-    EXTI_ClearITPendingBit(EXTI_Line13);    //清除13线中断
+    EXTI_ClearITPendingBit(EXTI_Line0);    //清除0线中断
 }
 
 /******************* (C) COPYRIGHT 2014 STMicroelectronics *****END OF FILE****/
